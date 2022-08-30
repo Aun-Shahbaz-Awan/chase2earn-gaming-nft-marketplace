@@ -3,6 +3,7 @@ import Image from "next/image";
 import Logo from "../assets/Logo.svg";
 import { TbAlertCircle } from "react-icons/tb";
 import { HiMenuAlt3 } from "react-icons/hi";
+import Link from "next/link";
 
 function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -11,15 +12,18 @@ function Navbar() {
       <div className="hidden xl:flex justify-between py-4 px-20">
         <div className="w-1/3 my-auto">
           <ul className="flex items-center justify-between">
-            <li className="flex items-center text-xl font-semibold">
-              <TbAlertCircle className="mr-1" />
-              About Us
-            </li>
-            <li className="flex items-center text-xl font-semibold">
+            <Link href="/">
+              <li className="flex items-center text-xl font-semibold cursor-pointer">
+                <TbAlertCircle className="mr-1" />
+                Home
+              </li>
+            </Link>
+
+            <li className="flex items-center text-xl font-semibold cursor-pointer">
               <TbAlertCircle className="mr-1" />
               Ecosystem
             </li>
-            <li className="flex items-center text-xl font-semibold">
+            <li className="flex items-center text-xl font-semibold cursor-pointer">
               <TbAlertCircle className="mr-1" />
               How to Pay
             </li>
@@ -30,7 +34,7 @@ function Navbar() {
         </div>
         <div className="w-1/3 my-auto">
           <ul className="flex items-center justify-between">
-            <li className="flex items-center text-xl font-semibold ">
+            <li className="flex items-center text-xl font-semibold cursor-pointer">
               <TbAlertCircle className="mr-1" />
               Pay to Earn
             </li>

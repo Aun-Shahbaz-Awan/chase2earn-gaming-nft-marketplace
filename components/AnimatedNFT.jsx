@@ -288,7 +288,6 @@ function AnimatedNFT() {
                       }
                     `}</style>
                   </div>
-
                   {/* <!-- Loading --> */}
                   <div className="all-loading-contract">
                     {/* <!-- Throttle ----------------------------------  --> */}

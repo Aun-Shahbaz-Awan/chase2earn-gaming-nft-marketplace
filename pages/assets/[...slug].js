@@ -49,7 +49,7 @@ export default function Asset() {
             src="/animated-nft"
             width="100%"
             // height="100%"
-            className="w-full h-[75vh] lg:h-[80vh] xl:h-[70vh] 2xl:h-[80vh]"
+            className="w-full h-[78vh] lg:h-[83vh] xl:h-[73vh] 2xl:h-[80vh]"
             title="Animated NFT Card"
           ></iframe>
         </div>
