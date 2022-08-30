@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import NFT from "../../assets/NFT_Image.svg";
 import Link from "next/link";
 
 function NFTCard({ token }) {

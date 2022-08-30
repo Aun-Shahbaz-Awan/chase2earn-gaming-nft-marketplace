@@ -1,7 +1,7 @@
 import axios from "axios";
 import Image from "next/image";
 import React from "react";
-import Car from "../assets/animated-nft/Cyclone_GT.svg";
+import Car from "../assets/cars/Cyclone_GT.svg";
 
 function AnimatedNFT() {
   const [slug, setSlug] = React.useState([]);
@@ -37,15 +37,15 @@ function AnimatedNFT() {
                 <div className="w-auto bg-white shadow-md shadow-[#2F3DFF] rounded-lg p-[1%]">
                   {/* <!-- Heading --> */}
                   <div>
-                    <h3 className="w-auto font-astrolab text-white text-center text-[6vw] bg-[url('../assets/animated-nft/BG_Header.png')] bg-no-repeat bg-cover bg-current rounded-t-xl py-[3.5vw] m-0">
+                    <h3 className="w-auto font-astrolab text-white text-center text-[6vw] bg-[url('/assets/nft/BG_Header.png')] bg-no-repeat bg-cover bg-current rounded-t-xl py-[3.5vw] m-0">
                       UNCOMMON
                     </h3>
                   </div>
                   {/* <!-- Token ID --> */}
                   <div className="w-auto flex justify-center bg-[#101322]">
-                    <div className="w-[100vw] h-[10vw] flex items-center justify-center bg-[url('../assets/animated-nft/BG_ID_Pink.svg')] bg-contain bg-no-repeat bg-center">
-                      <div className="w-[55vw] h-[9vw] flex items-center justify-center bg-[url('../assets/animated-nft/BG_ID_White.png')] bg-contain bg-no-repeat bg-center">
-                        <div className="w-[52vw] h-[9vw] flex items-center justify-center bg-[url('../assets/animated-nft/BG_ID_Dark.svg')] bg-contain bg-no-repeat bg-center">
+                    <div className="w-[100vw] h-[10vw] flex items-center justify-center bg-[url('/assets/nft/BG_ID_Pink.svg')] bg-contain bg-no-repeat bg-center">
+                      <div className="w-[55vw] h-[9vw] flex items-center justify-center bg-[url('/assets/nft/BG_ID_White.png')] bg-contain bg-no-repeat bg-center">
+                        <div className="w-[52vw] h-[9vw] flex items-center justify-center bg-[url('/assets/nft/BG_ID_Dark.svg')] bg-contain bg-no-repeat bg-center">
                           <h3 className="text-[#00F3FF] font-astrolab text-[2.5vw]">
                             #000{slug[1]}
                           </h3>
@@ -54,7 +54,7 @@ function AnimatedNFT() {
                     </div>
                   </div>
                   {/* <!-- Car BG --> */}
-                  <div className="w-auto h-[60vw] bg-[url('../assets/animated-nft/BG_Car.png')] bg-no-repeat bg-cover bg-current">
+                  <div className="w-auto h-[60vw] bg-[url('/assets/nft/BG_Car.png')] bg-no-repeat bg-cover bg-current">
                     {/* <!-- Car Image --> */}
                     <div className="flex justify-center relative">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -463,7 +463,7 @@ function AnimatedNFT() {
                         overflow: hidden;
                         box-shadow: -2px 0 8px 0 rgba(255, 255, 255, 0.6);
                       }
-                      ._label div:before {
+                      ._label div:after {
                         display: block;
                         width: 100%;
                         height: 100%;
@@ -483,11 +483,13 @@ function AnimatedNFT() {
                           #ae00ff 35%,
                           #9457b0
                         );
+                        /* background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/172299/bubbles-mask.gif); */
                         height: 100%;
                         width: 0%;
                         animation: throttle 2s forwards;
                         box-shadow: 0 0 2px 1px white inset;
                         border-radius: 0.4rem;
+                        opacity: 0.8;
                       }
                       ._label .two-earn {
                         position: absolute;

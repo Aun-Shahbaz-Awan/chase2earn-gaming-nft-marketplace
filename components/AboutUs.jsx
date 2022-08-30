@@ -7,7 +7,7 @@ function AboutUs() {
   return (
     <div className="mb-28">
       <div className="bg-secondary rounded-3xl  m-8 md:m-12 lg:m-20">
-        <div className="bg-[url('../assets/Ellipse.svg')] bg-no-repeat bg-auto bg-center flex-col lg:flex-row lg:flex py-2 md:py-4 px-8 md:px-24">
+        <div className="bg-[url('/assets/main/Ellipse.svg')] bg-no-repeat bg-auto bg-center flex-col lg:flex-row lg:flex py-2 md:py-4 px-8 md:px-24">
           <div className="w-full lg:w-5/12 py-12 lg:py-20 my-auto">
             <h5>About Us</h5>
             <h3 className="text-4xl font-play font-semibold uppercase py-4">

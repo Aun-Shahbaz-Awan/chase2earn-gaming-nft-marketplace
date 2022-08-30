@@ -9,8 +9,8 @@ import NFTShowcase from "../components/NFTShowcase.jsx";
 export default function Home() {
   return (
     <>
-      <div className="relative bg-[url('../assets/Hero_Background.png')] bg-no-repeat bg-cover h-screen">
-        <div className="absolute bg-[url('../assets/Hero_Background_Overlay.png')] bg-no-repeat bg-cover h-screen w-full">
+      <div className="relative bg-[url('/assets/main/Hero_Background.png')] bg-no-repeat bg-cover h-screen">
+        <div className="absolute bg-[url('/assets/main/Hero_Background_Overlay.png')] bg-no-repeat bg-cover h-screen w-full">
           <Navbar />
           <Hero />
           <NFTShowcase />
