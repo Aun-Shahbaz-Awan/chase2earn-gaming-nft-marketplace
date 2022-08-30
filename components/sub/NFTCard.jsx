@@ -5,7 +5,6 @@ import Link from "next/link";
 function NFTCard({ token }) {
   return (
     <div className="bg-secondary p-3 mx-auto rounded-xl">
-      {/* <div className="relative bg-[url('../assets/NFT_Image.png')] bg-no-repeat bg-cover min-w-full min-h-full max-w-full max-h-full"> */}
       <Image
         src={token?.token_uri}
         alt="NFT Image"

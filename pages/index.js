@@ -1,5 +1,4 @@
-// import Head from 'next/head'
-// import Image from "next/image";
+
 import AboutUs from "../components/AboutUs.jsx";
 import Footer from "../components/Footer.jsx";
 import Hero from "../components/Hero.jsx";
