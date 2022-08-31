@@ -1,0 +1,2 @@
+export const ERC721Address = "0x926051950E045E05BC424470ebAED16c9CF2b3a3";
+export const MKPlaceAddress = "0xa99fD892194888e780b3998aAFfaE2a66efe9FB4";

@@ -31,7 +31,7 @@ function NFTCard({ token }) {
       {/* Buy Button */}
       <Link href={`/assets/${token?.token_address}/${token?.token_id}`}>
         <button className="text-md font-medium bg-primary py-2 px-8 rounded-xl w-full mx-auto">
-          Buy Now
+          View
         </button>
       </Link>
     </div>

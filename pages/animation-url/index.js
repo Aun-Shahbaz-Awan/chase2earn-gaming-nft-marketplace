@@ -1,9 +1,9 @@
+import React from "react";
 import axios from "axios";
 import Image from "next/image";
-import React from "react";
-import Car from "../assets/cars/Cyclone_GT.svg";
+import Car from "../../assets/cars/Cyclone_GT.svg";
 
-function AnimatedNFT() {
+export default function AnimationURL() {
   const [slug, setSlug] = React.useState([]);
   const [attributeInfo, setAttributeInfo] = React.useState({});
   const [rander, setRander] = React.useState(false); // Use to Re-Rander to Fetch APIs
@@ -551,5 +551,3 @@ function AnimatedNFT() {
     </div>
   );
 }
-
-export default AnimatedNFT;

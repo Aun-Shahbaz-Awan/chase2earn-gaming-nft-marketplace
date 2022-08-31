@@ -1,57 +1,24 @@
 import axios from "axios";
 import React from "react";
 import NFTCard from "./sub/NFTCard";
-// import Image from "next/image";
-// import NFT from "../assets/NFT_Image.svg";
-const tokens = [
-  {
-    id: "3112",
-    name: "Token 1",
-    price: "0.00",
-  },
-  {
-    id: "3112",
-    name: "Token 1",
-    price: "0.00",
-  },
-  {
-    id: "3112",
-    name: "Token 1",
-    price: "0.00",
-  },
-  {
-    id: "3112",
-    name: "Token 1",
-    price: "0.00",
-  },
-  {
-    id: "3112",
-    name: "Token 1",
-    price: "0.00",
-  },
-  {
-    id: "3112",
-    name: "Token 1",
-    price: "0.00",
-  },
-  {
-    id: "3112",
-    name: "Token 1",
-    price: "0.00",
-  },
-  {
-    id: "3112",
-    name: "Token 1",
-    price: "0.00",
-  },
-];
+// import ERC721Address from "../contract/addresses";
 
 function NFTShowcase() {
-  const [usersNFT, setUsersNFT] = React.useState([])
+  const [usersNFT, setUsersNFT] = React.useState([]);
   const getUsersNFT = () => {
     axios
+      // getting users nft ---------------------------------------------------------------->>>>>>>>
+      // .get(
+      //   "https://deep-index.moralis.io/api/v2/0x919F1aF9BC7bB98D7052CB8B080578d8f4a1210d/nft/0xd1664A281B08d7b4249Cf09720C3f380604bBcEF?chain=rinkeby&format=decimal",
+      //   {
+      //     headers: {
+      //       accept: "application/json",
+      //       "X-API-Key":
+      //         "lEgC4FuVemuR3VBs9GTduYZjNWf5TNB5yWVPOc8mE76MZmFISj0mizqNmmZcKJUV",
+      //     },
+      //   }
       .get(
-        "https://deep-index.moralis.io/api/v2/0x919F1aF9BC7bB98D7052CB8B080578d8f4a1210d/nft/0xd1664A281B08d7b4249Cf09720C3f380604bBcEF?chain=rinkeby&format=decimal",
+        `https://deep-index.moralis.io/api/v2/nft/0x926051950E045E05BC424470ebAED16c9CF2b3a3?chain=rinkeby&format=decimal&limit=24`,
         {
           headers: {
             accept: "application/json",
