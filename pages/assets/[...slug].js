@@ -15,7 +15,7 @@ const client = createClient({
 export default function Asset() {
   const router = useRouter();
   const { slug } = router.query;
-  const [loadingStatus, setLoadingStatus] = React.useState(false);
+  // const [loadingStatus, setLoadingStatus] = React.useState(false);
   const [tokenInfo, setTokenInfo] = React.useState({});
   const getTokenInfo = () => {
     axios
@@ -35,14 +35,15 @@ export default function Asset() {
       )
       .then((responce) => {
         setTokenInfo(responce?.data);
-      });
+      })
+      .catch((error) => console.log(error));
   };
   // ----------------------------------------------- For Client Side Rendering ----->
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("slug", slug);
       getTokenInfo();
-      setLoadingStatus(true);
+      // setLoadingStatus(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);

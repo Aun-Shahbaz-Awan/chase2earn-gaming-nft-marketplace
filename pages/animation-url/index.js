@@ -1,10 +1,18 @@
 import React from "react";
 import axios from "axios";
 import Image from "next/image";
-import Car from "../../assets/cars/Cyclone_GT.svg";
+
+import cyclone_gt from "../../assets/cars/Cyclone_GT.svg";
+import class_t from "../../assets/cars/Class_T.svg";
+import amg_gt from "../../assets/cars/AMG_63.svg";
+import f11 from "../../assets/cars/F11.svg";
+import fantom from "../../assets/cars/Fantom.svg";
+import jaguar_c_type from "../../assets/cars/Jaguar_C_Type.svg";
 
 export default function AnimationURL() {
   const [slug, setSlug] = React.useState([]);
+  const [metadata, setMetadata] = React.useState({});
+  // const [image, setImage] = React.useState()
   const [attributeInfo, setAttributeInfo] = React.useState({});
   const [rander, setRander] = React.useState(false); // Use to Re-Rander to Fetch APIs
 
@@ -13,15 +21,20 @@ export default function AnimationURL() {
       .get("https://nft.chase2earn.com/api/v1/attribute/get/" + slug[1])
       .then((response) => {
         setAttributeInfo(response?.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
   React.useEffect(() => {
-    if (typeof window !== "undefined")
+    if (typeof window !== "undefined") {
       setSlug(localStorage.getItem("slug").split(","));
+      setMetadata(JSON.parse(localStorage.getItem("token_metadata")));
+    }
   }, [rander]);
 
   React.useEffect(() => {
-    if (slug !== undefined) {
+    if (typeof window !== "undefined" && slug !== undefined) {
       getAttributeInfo();
       setRander(true); // Responsible for get & set Slug!
     }
@@ -38,7 +51,7 @@ export default function AnimationURL() {
                   {/* <!-- Heading --> */}
                   <div>
                     <h3 className="w-auto font-astrolab text-white text-center text-[6vw] bg-[url('/assets/nft/BG_Header.png')] bg-no-repeat bg-cover bg-current rounded-t-xl py-[3.5vw] m-0">
-                      UNCOMMON
+                      {metadata?.category}
                     </h3>
                   </div>
                   {/* <!-- Token ID --> */}
@@ -59,14 +72,54 @@ export default function AnimationURL() {
                     <div className="flex justify-center relative">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       {/* top-[10vw] w-[57vw] */}
+
                       <div className="absolute top-[10vw]">
-                        <Image src={Car} alt="car-image" width="620" />
+                        {metadata?.name?.toLowerCase().replaceAll(" ", "_") ===
+                        "cyclone_gt" ? (
+                          <Image src={cyclone_gt} alt="car-image" width="620" />
+                        ) : (
+                          <></>
+                        )}
+                        {metadata?.name?.toLowerCase().replaceAll(" ", "_") ===
+                        "class_t" ? (
+                          <Image src={class_t} alt="car-image" width="620" />
+                        ) : (
+                          <></>
+                        )}
+                        {metadata?.name?.toLowerCase().replaceAll(" ", "_") ===
+                        "amg_gt" ? (
+                          <Image src={amg_gt} alt="car-image" width="620" />
+                        ) : (
+                          <></>
+                        )}{" "}
+                        {metadata?.name?.toLowerCase().replaceAll(" ", "_") ===
+                        "f11" ? (
+                          <Image src={f11} alt="car-image" width="620" />
+                        ) : (
+                          <></>
+                        )}
+                        {metadata?.name?.toLowerCase().replaceAll(" ", "_") ===
+                        "fantom" ? (
+                          <Image src={fantom} alt="car-image" width="620" />
+                        ) : (
+                          <></>
+                        )}{" "}
+                        {metadata?.name?.toLowerCase().replaceAll(" ", "_") ===
+                        "jaguar_c_type" ? (
+                          <Image
+                            src={jaguar_c_type}
+                            alt="car-image"
+                            width="620"
+                          />
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                     {/* <!-- Car Name --> */}
                     <div className="relative flex justify-center">
                       <h3 className="absolute text-[#00F3FF] font-a4speed text-[6vw] top-[40vw]">
-                        CYCLONE GT
+                        {metadata?.name}
                       </h3>
                     </div>
                     {/* <!-- Loading --> */}

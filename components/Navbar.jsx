@@ -85,9 +85,12 @@ function Navbar() {
             </li>
           </ul>
         </div>
-        <div className="w-1/3 flex justify-center my-auto">
-          <Image src={Logo} alt="Logo" weight="124" />
-        </div>
+        <Link href="/">
+          <div className="w-1/3 flex justify-center my-auto cursor-pointer">
+            <Image src={Logo} alt="Logo" weight="124" />
+          </div>
+        </Link>
+
         <div className="w-1/3 my-auto">
           <ul className="flex items-center justify-between">
             <li className="flex items-center text-xl font-semibold cursor-pointer">

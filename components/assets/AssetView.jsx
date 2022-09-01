@@ -31,14 +31,12 @@ export default function AssetView({ tokenInfo, slug }) {
   const getListed = () => {
     mk_contract.checkIsAlreadtisted(slug[1]).then((responce) => {
       setListed(responce);
-      getOwner();
-      getListed();
     });
   };
   // Sell Token ---------------------------------------------------------
   const handleSellToken = () => {
     mk_contract
-      .list(tokenInfo?.token_id, 100)
+      .listCar(tokenInfo?.token_id, 100)
       .then((responce) => {
         console.log("Listed Bro!:", responce);
         getOwner();
@@ -65,6 +63,7 @@ export default function AssetView({ tokenInfo, slug }) {
     if (typeof window !== "undefined" && signer) {
       getOwner();
       getListed();
+      // localStorage.setItem("signer", JSON.stringify(signer));
     }
   }, [signer]);
   console.log("MK Place", listed);
