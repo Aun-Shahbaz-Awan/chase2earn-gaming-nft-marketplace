@@ -1,28 +1,17 @@
-import AboutUs from "../components/AboutUs.jsx";
-import Footer from "../components/Footer.jsx";
-import Hero from "../components/Hero.jsx";
-import Navbar from "../components/Navbar.jsx";
-import CollectionTypeSection from "../components/CollectionTypeSection.jsx";
+import HomePage from "../components/home/HomePage.jsx";
 // -----------------------------------------------------
 import { WagmiConfig, createClient } from "wagmi";
 import { getDefaultProvider } from "ethers";
 
+const client = createClient({
+  autoConnect: true,
+  provider: getDefaultProvider(),
+});
+
 export default function Home() {
-  const client = createClient({
-    autoConnect: true,
-    provider: getDefaultProvider(),
-  });
   return (
     <WagmiConfig client={client}>
-      <div className="relative bg-[url('/assets/main/Hero_Background.png')] bg-no-repeat bg-cover h-screen">
-        <div className="absolute bg-[url('/assets/main/Hero_Background_Overlay.png')] bg-no-repeat bg-cover h-screen w-full">
-          <Navbar />
-          <Hero />
-          <CollectionTypeSection />
-          <AboutUs />
-          <Footer />
-        </div>
-      </div>
+      <HomePage />
     </WagmiConfig>
   );
 }

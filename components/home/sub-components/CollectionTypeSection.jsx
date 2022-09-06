@@ -1,12 +1,22 @@
-import axios from "axios";
+// import axios from "axios";
 import React from "react";
-import CollectionTypeCard from "./sub/CollectionTypeCard";
-import Cyclone_GT from "./../public/assets/category-card/Cyclone_GT.png";
-import Class_T from "./../public/assets/category-card/Class_T.png";
-import AMG_63 from "./../public/assets/category-card/AMG_63.png";
-import F11 from "./../public/assets/category-card/F11.png";
-import Fantom from "./../public/assets/category-card/Fantom.png";
-import Jaguar_C_Type from "./../public/assets/category-card/Jaguar_C_Type.png";
+import CollectionTypeCard from "../../sub/CollectionTypeCard";
+import Cyclone_GT from "./../../../public/assets/category-card/Cyclone_GT.png";
+import Class_T from "./../../../public/assets/category-card/Class_T.png";
+import AMG_63 from "./../../../public/assets/category-card/AMG_63.png";
+// import F11 from "./../../../public/assets/category-card/F11.png";
+import Fantom from "./../../../public/assets/category-card/Fantom.png";
+import Jaguar_C_Type from "./../../../public/assets/category-card/Jaguar_C_Type.png";
+// import { useCountdown } from "./../hooks/useCountdown";
+// --------------------------------------- wegmi
+import { WagmiConfig, createClient } from "wagmi";
+import { getDefaultProvider } from "ethers";
+import PublicNFTSale from "./PublicNFTSale";
+// --------------------------------------- component
+const client = createClient({
+  autoConnect: true,
+  provider: getDefaultProvider(),
+});
 
 const rare = [
   {
@@ -55,13 +65,18 @@ const uncommon = [
   },
 ];
 function CollectionTypeSection() {
+  // let [days, hours, minutes, seconds] = useCountdown("2022-11-19T12:59-0500");
   return (
     <>
+      {/* Uncommon / Rare NFT */}
+      {/* <WagmiConfig client={client}> */}
+        <PublicNFTSale />
+      {/* </WagmiConfig> */}
       {/* Uncommon NFT */}
       <div className="border border-[#FF0000] mx-8 md:mx-12 lg:mx-20 mb-28 rounded-3xl">
         <div className="flex justify-center mb-2">
           <div className="bg-primary border-2 border-[#FF0000] font-a4speed text-3xl pt-4 pb-3 px-12 rounded-full -mt-8 mb-8">
-            Uncommon
+            Uncommon Listed
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 mx-12">
@@ -74,7 +89,7 @@ function CollectionTypeSection() {
       <div className="border border-[#FF0000] mx-8 md:mx-12 lg:mx-20 mb-12 rounded-3xl">
         <div className="flex justify-center mb-2">
           <div className="bg-primary border-2 border-[#FF0000] font-a4speed text-3xl pt-4 pb-3 px-12 rounded-full -mt-8 mb-8">
-            Rare
+            Rare Listed
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 mx-12">

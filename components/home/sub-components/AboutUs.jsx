@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import Avatar from "../assets/Avatar.svg";
-import Comet from "../assets/Comet.svg";
+import Avatar from "../../../assets/Avatar.svg";
+import Comet from "../../../assets/Comet.svg";
 
 function AboutUs() {
   return (

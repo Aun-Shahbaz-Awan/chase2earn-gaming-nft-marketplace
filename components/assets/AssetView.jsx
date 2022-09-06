@@ -15,7 +15,7 @@ export default function AssetView({ tokenInfo, slug }) {
   // wegmi ---------------------------------------
   const { address, isConnected } = useAccount();
   const { data: signer, isError, isLoading } = useSigner();
-  console.log("Is Connected:", isConnected, " - Address:", address);
+  console.log("Is Connecteed", isConnected, " - Address:", address);
   // wegmi ---------------------------------------
   let contract = new ethers.Contract(ERC721Address, ERC721ABI, signer);
   let mk_contract = new ethers.Contract(MKPlaceAddress, MKPlaceABI, signer);
@@ -25,6 +25,7 @@ export default function AssetView({ tokenInfo, slug }) {
       //   if (tokenInfo?.owner_of === responce) setOwner(true);
       if (address === responce) {
         setOwner({ status: true, address: responce });
+        console.log("Owner Bro:", responce);
       } else setOwner({ status: false, address: responce });
     });
   };
