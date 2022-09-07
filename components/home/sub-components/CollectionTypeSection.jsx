@@ -63,8 +63,7 @@ function CollectionTypeSection() {
   return (
     <>
       {/* Uncommon / Rare NFT */}
-  
-        <PublicNFTSale />
+      <PublicNFTSale />
       {/* Uncommon NFT */}
       <div className="border border-[#FF0000] mx-8 md:mx-12 lg:mx-20 mb-28 rounded-3xl">
         <div className="flex justify-center mb-2">
