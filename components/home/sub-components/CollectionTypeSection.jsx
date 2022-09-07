@@ -9,14 +9,8 @@ import Fantom from "./../../../public/assets/category-card/Fantom.png";
 import Jaguar_C_Type from "./../../../public/assets/category-card/Jaguar_C_Type.png";
 // import { useCountdown } from "./../hooks/useCountdown";
 // --------------------------------------- wegmi
-import { WagmiConfig, createClient } from "wagmi";
-import { getDefaultProvider } from "ethers";
 import PublicNFTSale from "./PublicNFTSale";
 // --------------------------------------- component
-const client = createClient({
-  autoConnect: true,
-  provider: getDefaultProvider(),
-});
 
 const rare = [
   {
@@ -69,9 +63,8 @@ function CollectionTypeSection() {
   return (
     <>
       {/* Uncommon / Rare NFT */}
-      {/* <WagmiConfig client={client}> */}
+  
         <PublicNFTSale />
-      {/* </WagmiConfig> */}
       {/* Uncommon NFT */}
       <div className="border border-[#FF0000] mx-8 md:mx-12 lg:mx-20 mb-28 rounded-3xl">
         <div className="flex justify-center mb-2">

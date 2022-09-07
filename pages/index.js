@@ -1,17 +1,8 @@
 import HomePage from "../components/home/HomePage.jsx";
-// -----------------------------------------------------
-import { WagmiConfig, createClient } from "wagmi";
-import { getDefaultProvider } from "ethers";
-
-const client = createClient({
-  autoConnect: true,
-  provider: getDefaultProvider(),
-});
+// import { useContext } from "react";
 
 export default function Home() {
-  return (
-    <WagmiConfig client={client}>
-      <HomePage />
-    </WagmiConfig>
-  );
+  // const { wallet, setWallet } = useContext(AuthContext);
+  // console.log("Wallet:", wallet);
+  return <HomePage />;
 }

@@ -2,15 +2,15 @@ import React from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 // --------------------------------------- wegmi
-import { WagmiConfig, createClient } from "wagmi";
-import { getDefaultProvider } from "ethers";
+// import { WagmiConfig, createClient } from "wagmi";
+// import { getDefaultProvider } from "ethers";
 // --------------------------------------- component
 import AssetView from "../../components/assets/AssetView";
 
-const client = createClient({
-  autoConnect: true,
-  provider: getDefaultProvider(),
-});
+// const client = createClient({
+//   autoConnect: true,
+//   provider: getDefaultProvider(),
+// });
 
 export default function Asset() {
   const router = useRouter();
@@ -48,8 +48,8 @@ export default function Asset() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
   return (
-    <WagmiConfig client={client}>
+    // <WagmiConfig client={client}>
       <AssetView tokenInfo={tokenInfo} slug={slug} />
-    </WagmiConfig>
+    // </WagmiConfig>
   );
 }

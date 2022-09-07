@@ -63,7 +63,7 @@ function CollectionShowcase() {
                 return <NFTCard key={token?.token_id} token={token} />;
               })
             : [...Array(4)].map((card, index) => {
-                return <NFTCardLazy key={"lazy" + index} />;
+                return <NFTCarLazy key={"lazy" + index} />;
               })}
         </div>
 

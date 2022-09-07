@@ -14,11 +14,11 @@ function Navbar() {
       try {
         await window.ethereum.enable();
         const accounts = await window.ethereum.send("eth_requestAccounts");
-        // const _signer = new ethers.providers.Web3Provider(window.ethereum);
+        const _signer = new ethers.providers.Web3Provider(window.ethereum);
         setWallet({
           ...wallet,
           address: accounts?.result[0],
-          // signer: _signer.getSigner(),
+          signer: _signer.getSigner(),
           // network: await _signer.getNetwork(),
         });
       } catch (error) {
