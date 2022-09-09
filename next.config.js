@@ -14,6 +14,7 @@ const nextConfig = {
   env: {
     moralisKey:
       "lEgC4FuVemuR3VBs9GTduYZjNWf5TNB5yWVPOc8mE76MZmFISj0mizqNmmZcKJUV",
+    Alchemy_Key: "_-9LnnqA4wFFqR-M8fxquvtbRS_tJBfP",
   },
 };
 

@@ -1,14 +1,17 @@
+import Image from "next/image";
 import React from "react";
+import { useRouter } from "next/router";
 
 function NFTCard({ token }) {
+  const router = useRouter();
   const handleViewItem = () => {
     localStorage.setItem("token_metadata", token?.metadata);
-    // router.push(`/assets/${token?.token_address}/${token?.token_id}`);
+    router.push(`/assets/${token?.token_address}/${token?.token_id}`);
   };
 
   return (
     <div className="bg-secondary p-3 mx-auto rounded-xl">
-      <img
+      <Image
         src={JSON.parse(token?.metadata)?.image}
         alt="NFT"
         className="rounded-xl"

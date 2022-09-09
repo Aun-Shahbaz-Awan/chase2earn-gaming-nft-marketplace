@@ -20,7 +20,7 @@ function Account() {
         {
           headers: {
             accept: "application/json",
-            "X-API-Key": process.env.REACT_APP_MORALIS_KEY,
+            "X-API-Key": process.env.moralisKey,
           },
         }
       )
@@ -38,7 +38,7 @@ function Account() {
         {
           headers: {
             accept: "application/json",
-            "X-API-Key": process.env.REACT_APP_MORALIS_KEY,
+            "X-API-Key": process.env.moralisKey,
           },
         }
       )
@@ -52,15 +52,20 @@ function Account() {
   console.log("Tokens:", NFTS, "ADDRESSE:", address);
   //   console.log("ERC Adress:", ERC721Address, "Cursor:", cursor);
   useEffect(() => {
-    getUsersNFTS();
-  }, []);
+    if (address) getUsersNFTS();
+  }, [address]);
   return (
     <React.Fragment>
       {/* <Navbar /> */}
       <Navbar />
-      <h3 className="text-4xl font-bold text-center px-12 mt-12">
+      {/* <h3 className="text-4xl font-bold text-center px-12 mt-12">
         MY Collection
-      </h3>
+      </h3> */}
+      <div className="px-20 mb-24">
+        <div className="relative bg-secondary h-44 rounded-xl">
+          <div className="absolute bg-gray-400 h-36 w-36 rounded-full left-16 -bottom-16 border-8 border-primary"></div>
+        </div>
+      </div>
       <div className="mt-16 mx-8 md:mx-12 lg:mx-16 mb-12 rounded-3xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-8 mx-4">
           {NFTS.length || loadingStatus ? (

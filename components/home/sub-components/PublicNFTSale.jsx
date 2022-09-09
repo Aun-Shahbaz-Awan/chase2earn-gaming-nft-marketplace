@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Image from "next/image";
 import { ethers } from "ethers";
-import { useSigner } from "wagmi";
+import { useSigner, useAccount } from "wagmi";
 import { ERC721Address, MKPlaceAddress } from "./../../../contract/addresses";
 import { ERC721ABI, MKPlaceABI } from "./../../../contract/abis";
 // Image
@@ -15,7 +15,7 @@ import AMG from "./../../../public/assets/category-card/AMG_63.png";
 import FANTOM from "./../../../public/assets/category-card/Fantom.png";
 import C_TYPE from "./../../../public/assets/category-card/Jaguar_C_Type.png";
 import F11 from "./../../../public/assets/category-card/Unreveal_Card.png";
-// ---- headless-ui & react-tostify
+// headless-ui & react-tostify
 import { Dialog, Transition } from "@headlessui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,7 +25,8 @@ import { FiExternalLink } from "react-icons/fi";
 function PublicNFTSale() {
   /* global BigInt */
   const { data: signer } = useSigner();
-  // const { address } = useAccount();
+  const { address } = useAccount();
+  console.log("Address (PublicNFTSale Page):", address);
   const [tokenAvailabilityStatus, setTokenAvailabilityStatus] = useState({});
   const [mintingStatus, setMintingStatus] = useState(false);
   const [mintingProcessStatus, setMintingProcessStatus] = useState(false);
@@ -41,7 +42,7 @@ function PublicNFTSale() {
   console.log("Minting ID#:", mintingId);
 
   const fetchTokenAvailabilityStatus = async () => {
-    console.log("Fetching Avaible NFT...")
+    console.log("Fetching Avaible NFT...");
     const uncommon = (
       await Promise.all(
         [5, 6, 7, 8].map(async (number) => {
@@ -144,10 +145,10 @@ function PublicNFTSale() {
       }
     );
   };
-  console.log("Available NFT:", tokenAvailabilityStatus)
+  console.log("Available NFT:", tokenAvailabilityStatus);
   useEffect(() => {
     if (NFTContract !== "" && signer) {
-       fetchTokenAvailabilityStatus();
+      fetchTokenAvailabilityStatus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer]);

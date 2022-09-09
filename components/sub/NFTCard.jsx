@@ -1,12 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 function NFTCard({ token }) {
   const router = useRouter();
   const { type } = router.query;
-  console.log("Token:", token);
+
   const handleViewItem = () => {
     localStorage.setItem("token_metadata", token?.metadata);
     router.push(`/assets/${token?.token_address}/${token?.token_id}`);
