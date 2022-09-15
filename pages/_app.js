@@ -1,25 +1,16 @@
 import "../styles/globals.css";
-// -----------------------------------------------------
-// import { WagmiConfig, createClient } from "wagmi";
-// import { getDefaultProvider } from "ethers";
-
-// const client = createClient({
-//   autoConnect: true,
-//   provider: getDefaultProvider(),
-// });
-// Choose which chains you'd like to show
-
 import { WagmiConfig, createClient, chain } from "wagmi";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
+import { ContextWrapper } from "../context/state";
 
 const chains = [chain.rinkeby];
 const alchemyId = process.env.Alchemy_Key;
 const client = createClient(
   getDefaultClient({
     appName: "Your App Name",
+    autoConnect: true,
     alchemyId,
     chains,
-    autoConnect: true,
   })
 );
 
@@ -27,7 +18,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <WagmiConfig client={client}>
       <ConnectKitProvider>
-        <Component {...pageProps} />
+        <ContextWrapper>
+          <Component {...pageProps} />
+        </ContextWrapper>
       </ConnectKitProvider>
     </WagmiConfig>
   );

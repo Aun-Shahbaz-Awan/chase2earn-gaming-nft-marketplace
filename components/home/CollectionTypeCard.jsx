@@ -4,7 +4,7 @@ import Link from "next/link";
 
 function CollectionTypeCard({ category }) {
   return (
-    <Link href={"collection/" + category?.url}>
+    <Link href={"listed/" + category?.url}>
       <div className="bg-secondary p-3 mx-auto rounded-xl cursor-pointer hover:scale-105 hover:border border-sky-900 ease-in-out transition-all">
         <Image
           src={category?.image}

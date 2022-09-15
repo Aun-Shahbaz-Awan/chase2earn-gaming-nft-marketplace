@@ -1,74 +1,67 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Image from "next/image";
 import { ethers } from "ethers";
-import { useSigner, useAccount } from "wagmi";
-import { ERC721Address, MKPlaceAddress } from "./../../../contract/addresses";
-import { ERC721ABI, MKPlaceABI } from "./../../../contract/abis";
 // Image
-import Title_BG from "./../../../public/assets/category-card/Title_BG.svg";
-import UnRevealed from "./../../../public/assets/category-card/Unreveal_Card.png";
-import RareGIF from "./../../../public/assets/category-card/_rare.gif";
-// import UncommonGIF from "./../../../public/assets/category-card/_uncommon.gif";
-// import Class_T from "./../../../public/assets/category-card/Class_T.png";
-import Cyclone from "./../../../public/assets/category-card/Cyclone_GT.png";
-import AMG from "./../../../public/assets/category-card/AMG_63.png";
-import FANTOM from "./../../../public/assets/category-card/Fantom.png";
-import C_TYPE from "./../../../public/assets/category-card/Jaguar_C_Type.png";
-import F11 from "./../../../public/assets/category-card/Unreveal_Card.png";
+import Title_BG from "../../public/assets/category-card/Title_BG.svg";
+import UnRevealed from "../../public/assets/category-card/Unreveal_Card.png";
+import RareGIF from "../../public/assets/category-card/_rare.gif";
+import UncommonGIF from "../../public/assets/category-card/_uncommon.gif";
+import CLASS_T from "../../public/assets/category-card/Class_T.png";
+import Cyclone from "../../public/assets/category-card/Cyclone_GT.png";
+import AMG from "../../public/assets/category-card/AMG_63.png";
+import FANTOM from "../../public/assets/category-card/Fantom.png";
+import C_TYPE from "../../public/assets/category-card/Jaguar_C_Type.png";
+import F11 from "../../public/assets/category-card/Unreveal_Card.png";
 // headless-ui & react-tostify
 import { Dialog, Transition } from "@headlessui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { Link } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
+import { useNetwork } from "wagmi";
 
-function PublicNFTSale() {
-  /* global BigInt */
-  const { data: signer } = useSigner();
-  const { address } = useAccount();
-  console.log("Address (PublicNFTSale Page):", address);
+function PublicNFTSale({ NFTContract, MKPContract, signer }) {
+  const { chain } = useNetwork();
   const [tokenAvailabilityStatus, setTokenAvailabilityStatus] = useState({});
-  const [mintingStatus, setMintingStatus] = useState(false);
+  const [mintingStatus, setMintingStatus] = useState({
+    status: false,
+    category: "uncommon",
+  });
   const [mintingProcessStatus, setMintingProcessStatus] = useState(false);
   const [mintingId, setMintingId] = useState(0);
   const [transactionHash, setTransactionHash] = useState("");
-
-  let NFTContract = "",
-    MKPContract = "";
-  if (typeof window !== "undefined") {
-    NFTContract = new ethers.Contract(ERC721Address, ERC721ABI, signer);
-    MKPContract = new ethers.Contract(MKPlaceAddress, MKPlaceABI, signer);
-  }
-  console.log("Minting ID#:", mintingId);
-
   const fetchTokenAvailabilityStatus = async () => {
-    console.log("Fetching Avaible NFT...");
+    console.log("Contract Fetching...:", NFTContract);
     const uncommon = (
       await Promise.all(
-        [5, 6, 7, 8].map(async (number) => {
-          const availibilityStatus = await NFTContract.carInfo(number).then(
-            (responce) => {
+        [1, 2, 3, 4].map(async (number) => {
+          const availibilityStatus = await NFTContract.carInfo(number)
+            .then((responce) => {
+              console.log("uncommon responce:", responce);
               return parseInt(responce.amount, 10) >
                 parseInt(responce.totalSelled, 10)
                 ? number
                 : false;
-            }
-          );
+            })
+            .catch((error) =>
+              console.log("Fetching Uncommon NFT Error:", error)
+            );
           return availibilityStatus;
         })
       )
     ).filter(Boolean);
     const rare = (
       await Promise.all(
-        [1, 2, 3, 4].map(async (number) => {
-          const availibilityStatus = await NFTContract.carInfo(number).then(
-            (responce) => {
+        [5, 6, 7, 8].map(async (number) => {
+          const availibilityStatus = await NFTContract.carInfo(number)
+            .then((responce) => {
               return parseInt(responce.amount, 10) >
                 parseInt(responce.totalSelled, 10)
                 ? number
                 : false;
-            }
-          );
+            })
+            .catch((error) =>
+              console.log("Fetching Uncommon NFT Error:", error)
+            );
           return availibilityStatus;
         })
       )
@@ -77,14 +70,21 @@ function PublicNFTSale() {
   };
 
   const handleBuyUncommon = () => {
-    setMintingStatus(true);
+    setMintingStatus({ status: true, category: "uncommon" });
     const mintId =
       tokenAvailabilityStatus.uncommon[
         Math.floor(Math.random() * tokenAvailabilityStatus?.uncommon?.length)
       ];
     setMintingId(mintId);
+    console.log(
+      "Token Availability Status",
+      tokenAvailabilityStatus,
+      "Minting Token #",
+      mintId
+    );
     toast.promise(
       MKPContract.buyCar(mintId, 1, {
+        /* global BigInt */
         value: BigInt(ethers.utils.parseEther("0.0000000000000001")),
       })
         .then((tx) => {
@@ -102,7 +102,7 @@ function PublicNFTSale() {
         })
         .catch((err) => {
           toast.error("Something went wrong");
-          setMintingStatus(false);
+          setMintingStatus({ status: false, category: "uncommon" });
           console.log("Error", err);
         }),
       {
@@ -112,7 +112,7 @@ function PublicNFTSale() {
   };
 
   const handleBuyRare = () => {
-    setMintingStatus(true);
+    setMintingStatus({ status: true, category: "rare" });
     const mintId =
       tokenAvailabilityStatus.rare[
         Math.floor(Math.random() * tokenAvailabilityStatus?.rare?.length)
@@ -137,7 +137,7 @@ function PublicNFTSale() {
         })
         .catch((err) => {
           toast.error("Something went wrong");
-          setMintingStatus(false);
+          setMintingStatus({ status: false, category: "uncommon" });
           console.log("Error", err);
         }),
       {
@@ -145,25 +145,21 @@ function PublicNFTSale() {
       }
     );
   };
-  console.log("Available NFT:", tokenAvailabilityStatus);
-  useEffect(() => {
-    if (NFTContract !== "" && signer) {
-      fetchTokenAvailabilityStatus();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signer]);
 
+  useEffect(() => {
+    if (signer) fetchTokenAvailabilityStatus();
+  }, [signer]);
   return (
     <>
       {/* react_toastify model */}
       <ToastContainer />
       {/* headless ui model */}
-      <Transition appear show={mintingStatus} as={Fragment}>
+      <Transition appear show={mintingStatus.status} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-10"
           onClose={() => {
-            setMintingStatus(false);
+            setMintingStatus({ status: false, category: "uncommon" });
             setMintingProcessStatus(false);
             setTransactionHash("");
           }}
@@ -200,18 +196,26 @@ function PublicNFTSale() {
                   </Dialog.Title>
                   <div className="mt-4">
                     {!mintingProcessStatus ? (
-                      <Image
-                        src={RareGIF}
-                        alt="rare-gif"
-                        className="rounded-xl"
-                      />
+                      mintingStatus.category == "rare" ? (
+                        <Image
+                          src={RareGIF}
+                          alt="rare-gif"
+                          className="rounded-xl"
+                        />
+                      ) : (
+                        <Image
+                          src={UncommonGIF}
+                          alt="uncommon-gif"
+                          className="rounded-xl"
+                        />
+                      )
                     ) : (
                       <>
-                        {mintingId === 5 ? (
+                        {mintingId === 6 ? (
                           <Image src={AMG} alt="AMG" className="rounded-xl" />
                         ) : (
                           <>
-                            {mintingId === 6 ? (
+                            {mintingId === 7 ? (
                               <Image
                                 src={FANTOM}
                                 alt="AMG"
@@ -219,7 +223,7 @@ function PublicNFTSale() {
                               />
                             ) : (
                               <>
-                                {mintingId === 7 ? (
+                                {mintingId === 8 ? (
                                   <Image
                                     src={C_TYPE}
                                     alt="AMG"
@@ -227,7 +231,7 @@ function PublicNFTSale() {
                                   />
                                 ) : (
                                   <>
-                                    {mintingId === 8 ? (
+                                    {mintingId === 5 ? (
                                       <Image
                                         src={F11}
                                         alt="AMG"
@@ -309,7 +313,10 @@ function PublicNFTSale() {
                         type="button"
                         className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                         onClick={() => {
-                          setMintingStatus(false);
+                          setMintingStatus({
+                            status: false,
+                            category: "uncommon",
+                          });
                           setMintingProcessStatus(false);
                           setTransactionHash("");
                         }}
@@ -409,8 +416,9 @@ function PublicNFTSale() {
             {/* Buy Now */}
             <button
               type="button"
+              disabled={!signer || chain?.id !== process.env.chain_id}
               onClick={() => handleBuyUncommon()}
-              className="w-full text-md text-center text-slate-400 hover:text-white font-semibold bg-primary active:bg-secondary border border-pink-300 border-b-4 border-l-4 hover:border-slate-600 hover:border-b-4 py-3 rounded-xl"
+              className="w-full text-md text-center text-slate-400 hover:text-white font-semibold bg-primary active:bg-secondary border border-pink-300 border-b-4 border-l-4 hover:border-slate-600 hover:border-b-4 disabled:border-0 disabled:bg-primary disabled:text-slate-400 py-3 rounded-xl"
             >
               Buy Now
             </button>
@@ -564,8 +572,9 @@ function PublicNFTSale() {
 
             <button
               type="button"
+              disabled={!signer || chain?.id !== process.env.chain_id}
               onClick={() => handleBuyRare()}
-              className="w-full text-md text-center text-slate-400 hover:text-white font-semibold bg-primary  active:bg-secondary border border-pink-300 border-b-4 border-l-4 hover:border-slate-600 hover:border-b-4 py-3 rounded-xl"
+              className="w-full text-md text-center text-slate-400 hover:text-white font-semibold bg-primary  active:bg-secondary border border-pink-300 border-b-4 border-l-4 hover:border-slate-600 hover:border-b-4  disabled:border-0 disabled:bg-primary disabled:text-slate-400 py-3 rounded-xl"
             >
               Buy Now
             </button>

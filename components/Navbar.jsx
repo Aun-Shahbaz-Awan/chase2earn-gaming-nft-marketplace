@@ -1,26 +1,41 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 import Logo from "../assets/Logo.svg";
 // react-icons
 import { BiUser } from "react-icons/bi";
 import { TbAlertCircle } from "react-icons/tb";
 import { HiMenuAlt3 } from "react-icons/hi";
-import Link from "next/link";
 // wamgi
-// import { useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
+// Context Hooks
+import { useAppContext } from "../context/state";
 
 function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
-  // const { address, isDisconnected } = useAccount();
-  // const [walletAddress, setWalletAddress] = useState("");
-
-  // // Connect wallet on Refresh Page
-  // React.useEffect(() => {
-  //   setWalletAddress(address);
-  //   // connectWallet();
-  //   // eslint-disable-next-line
-  // }, []);
+  const { address, isConnected } = useAccount();
+  const tokenContext = useAppContext(); // Context Hook
+  // Connect wallet on Refresh Page
+  const handleLogin = () => {
+    axios
+      .post(process.env.baseURL + "/auth/login", { wallet: address })
+      .then((responce) => {
+        tokenContext?.setBearerToken(responce?.data?.token);
+      });
+  };
+  const handleLogout = () => {
+    axios.get(process.env.baseURL + "/auth/logout").then((responce) => {
+      console.log(responce?.data);
+    });
+  };
+  console.log("Randering Navbar:");
+  React.useEffect(() => {
+    console.log("Login Effect Called!");
+    isConnected ? handleLogin() : handleLogout();
+    // eslint-disable-next-line
+  }, [isConnected]);
   return (
     <React.Fragment>
       <div className="hidden xl:flex justify-between py-4 px-20">
@@ -33,10 +48,13 @@ function Navbar() {
               </li>
             </Link>
 
-            <li className="flex items-center text-xl font-semibold cursor-pointer">
-              <TbAlertCircle className="mr-1" />
-              Ecosystem
-            </li>
+            <Link href="/listed">
+              <li className="flex items-center text-xl font-semibold cursor-pointer">
+                <TbAlertCircle className="mr-1" />
+                Marketplace
+              </li>
+            </Link>
+
             <li className="flex items-center text-xl font-semibold cursor-pointer">
               <TbAlertCircle className="mr-1" />
               How to Pay
@@ -110,14 +128,18 @@ function Navbar() {
       {isOpen && (
         <div className="block xl:hidden h-[calc(100vh-130px)] bg-[#000000a9]">
           <ul className="text-center pt-12">
-            <li className="flex items-center justify-center text-xl font-semibold py-5">
-              <TbAlertCircle className="mr-1" />
-              About Us
-            </li>
-            <li className="flex items-center justify-center text-xl font-semibold py-5">
-              <TbAlertCircle className="mr-1" />
-              Ecosystem
-            </li>
+            <Link href="/">
+              <li className="flex items-center justify-center text-xl font-semibold py-5 cursor-pointer">
+                <TbAlertCircle className="mr-1" />
+                Home
+              </li>
+            </Link>
+            <Link href="/listed">
+              <li className="flex items-center justify-center text-xl font-semibold cursor-pointer py-5">
+                <TbAlertCircle className="mr-1" />
+                Marketplace
+              </li>
+            </Link>
             <li className="flex items-center justify-center text-xl font-semibold py-5">
               <TbAlertCircle className="mr-1" />
               How to Pay

@@ -9,16 +9,28 @@ import f11 from "../../assets/cars/F11.svg";
 import fantom from "../../assets/cars/Fantom.svg";
 import jaguar_c_type from "../../assets/cars/Jaguar_C_Type.svg";
 
+import { ERC721Address } from "../../contract/addresses";
+import { ERC721ABI } from "../../contract/abis";
+import { useSigner } from "wagmi";
+import { ethers } from "ethers";
+
 export default function AnimationURL() {
   const [slug, setSlug] = React.useState([]);
-  const [metadata, setMetadata] = React.useState({});
-  // const [image, setImage] = React.useState()
+  const [metadata, setMetadata] = React.useState({
+    name: "Loading",
+    category: "Loading",
+  });
   const [attributeInfo, setAttributeInfo] = React.useState({});
   const [rander, setRander] = React.useState(false); // Use to Re-Rander to Fetch APIs
+  const { data: signer } = useSigner({
+    onError(error) {
+      console.log("Animation Card > Signer Error:", error);
+    },
+  });
 
   const getAttributeInfo = () => {
     axios
-      .get("https://nft.chase2earn.com/api/v1/attribute/get/" + slug[1])
+      .get(process.env.baseURL + "/attribute/get/" + slug[1])
       .then((response) => {
         setAttributeInfo(response?.data);
       })
@@ -26,20 +38,45 @@ export default function AnimationURL() {
         console.log(error);
       });
   };
+  let contract = new ethers.Contract(ERC721Address, ERC721ABI, signer);
+
+  const getMetadataInfo = () => {
+    // console.log("Getting Token Info:");
+    contract.tokenURI(slug[1]).then((tokenURI) =>
+      axios
+        .get(tokenURI)
+        .then((response) => setMetadata(response?.data))
+        .catch((error) => console.log("Fetching Data From URI Error:", error))
+    );
+    // axios
+    //   .get(process.env.baseURL + "/list/get-listing/" + slug[1])
+    //   .then((response) => {
+    //     setMetadata(response?.data?.metadata);
+    //     // console.log("MotaData:", response?.data?.metadata);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  };
+
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       setSlug(localStorage.getItem("slug").split(","));
-      setMetadata(JSON.parse(localStorage.getItem("token_metadata")));
     }
   }, [rander]);
-
   React.useEffect(() => {
-    if (typeof window !== "undefined" && slug !== undefined) {
+    if (
+      typeof window !== "undefined" &&
+      slug[1] !== undefined &&
+      !rander &&
+      signer
+    ) {
       getAttributeInfo();
+      getMetadataInfo();
       setRander(true); // Responsible for get & set Slug!
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
+  }, [slug, signer]);
   return (
     <div className="bg-[#f2f2f2] rounded-lg">
       <div className="w-auto p-[2%]">
@@ -51,7 +88,7 @@ export default function AnimationURL() {
                   {/* <!-- Heading --> */}
                   <div>
                     <h3 className="w-auto font-astrolab text-white text-center text-[6vw] bg-[url('/assets/nft/BG_Header.png')] bg-no-repeat bg-cover bg-current rounded-t-xl py-[3.5vw] m-0">
-                      {metadata?.category}
+                      {metadata?.category ? metadata?.category : "Error"}
                     </h3>
                   </div>
                   {/* <!-- Token ID --> */}
@@ -60,7 +97,7 @@ export default function AnimationURL() {
                       <div className="w-[55vw] h-[9vw] flex items-center justify-center bg-[url('/assets/nft/BG_ID_White.png')] bg-contain bg-no-repeat bg-center">
                         <div className="w-[52vw] h-[9vw] flex items-center justify-center bg-[url('/assets/nft/BG_ID_Dark.svg')] bg-contain bg-no-repeat bg-center">
                           <h3 className="text-[#00F3FF] font-astrolab text-[2.5vw]">
-                            #000{slug[1]}
+                            #000{slug[1] ? slug[1] : "xx"}
                           </h3>
                         </div>
                       </div>
@@ -105,7 +142,7 @@ export default function AnimationURL() {
                           <></>
                         )}{" "}
                         {metadata?.name?.toLowerCase().replaceAll(" ", "_") ===
-                        "jaguar_c_type" ? (
+                        "jaguar_c-type" ? (
                           <Image
                             src={jaguar_c_type}
                             alt="car-image"
@@ -119,7 +156,7 @@ export default function AnimationURL() {
                     {/* <!-- Car Name --> */}
                     <div className="relative flex justify-center">
                       <h3 className="absolute text-[#00F3FF] font-a4speed text-[6vw] top-[40vw]">
-                        {metadata?.name}
+                        {metadata?.name ? metadata?.name : "Error"}
                       </h3>
                     </div>
                     {/* <!-- Loading --> */}
@@ -127,7 +164,8 @@ export default function AnimationURL() {
                       <div className="w-full flex absolute top-[49vw]">
                         <div className="w-1/2 px-[3vw] py-[1vw]">
                           <h2 className="text-white font-astrolab text-[1.5vw] pb-[1vw] m-0">
-                            Level {attributeInfo?.level}
+                            Level{" "}
+                            {attributeInfo?.level ? attributeInfo?.level : "xx"}
                           </h2>
                           <div className="w-full">
                             <div className="main-progress-bar stripes animated">
@@ -182,7 +220,10 @@ export default function AnimationURL() {
                         {/* ---------- */}
                         <div className="w-1/2 px-[3vw] py-[1vw]">
                           <h2 className="text-white font-astrolab text-[1.5vw] pb-[1vw] m-0">
-                            Damage {attributeInfo?.damage}
+                            Damage{" "}
+                            {attributeInfo?.damage
+                              ? attributeInfo?.damage
+                              : "xx"}
                           </h2>
                           <div className="w-full">
                             <div className="main-progress-bar stripes animated">
@@ -194,7 +235,9 @@ export default function AnimationURL() {
                                   width: 0%;
                                 }
                                 100% {
-                                  width: ${attributeInfo?.damage + "%"};
+                                  width: ${attributeInfo?.damage
+                                    ? attributeInfo?.damage + "%"
+                                    : "0%"};
                                 }
                               }
                               .main-progress-bar {
@@ -357,7 +400,11 @@ export default function AnimationURL() {
                           ></div>
                         </label>
                       </div>
-                      <h3 className="points">{attributeInfo?.throttle}</h3>
+                      <h3 className="points">
+                        {attributeInfo?.throttle
+                          ? attributeInfo?.throttle
+                          : "xx"}
+                      </h3>
                     </div>
                     {/* <!-- 2Earn ----------------------------------  --> */}
                     <div className="all-loading-sub-container">
@@ -373,7 +420,9 @@ export default function AnimationURL() {
                           ></div>
                         </label>
                       </div>
-                      <h3 className="points">{attributeInfo?.earn}</h3>
+                      <h3 className="points">
+                        {attributeInfo?.earn ? attributeInfo.earn : "xx"}
+                      </h3>
                     </div>
                     {/* <!-- Nitro ----------------------------------  --> */}
                     <div className="all-loading-sub-container">
@@ -386,7 +435,9 @@ export default function AnimationURL() {
                           <div id="level-loading-fill" className="nitro"></div>
                         </label>
                       </div>
-                      <h3 className="points">{attributeInfo?.nitro}</h3>
+                      <h3 className="points">
+                        {attributeInfo?.nitro ? attributeInfo?.nitro : "xx"}
+                      </h3>
                     </div>
                     {/* <!-- Tire ----------------------------------  --> */}
                     <div className="all-loading-sub-container">
@@ -399,7 +450,9 @@ export default function AnimationURL() {
                           <div id="level-loading-fill" className="tire"></div>
                         </label>
                       </div>
-                      <h3 className="points">{attributeInfo?.tire}</h3>
+                      <h3 className="points">
+                        {attributeInfo?.tire ? attributeInfo?.tire : "xx"}
+                      </h3>
                     </div>
                     <style jsx>{`
                       .all-loading-contract {
@@ -473,7 +526,9 @@ export default function AnimationURL() {
                           width: 0%;
                         }
                         to {
-                          width: ${attributeInfo?.throttle + "%"};
+                          width: ${attributeInfo?.throttle
+                            ? attributeInfo?.throttle + "%"
+                            : "0%"};
                         }
                       }
                       @keyframes two-earn {
@@ -481,7 +536,9 @@ export default function AnimationURL() {
                           width: 0%;
                         }
                         to {
-                          width: ${attributeInfo?.earn + "%"};
+                          width: ${attributeInfo?.earn
+                            ? attributeInfo?.earn + "%"
+                            : "0%"};
                         }
                       }
                       @keyframes nitro {
@@ -489,7 +546,9 @@ export default function AnimationURL() {
                           width: 0%;
                         }
                         to {
-                          width: ${attributeInfo?.nitro + "%"};
+                          width: ${attributeInfo?.nitro
+                            ? attributeInfo?.nitro + "%"
+                            : "0%"};
                         }
                       }
                       @keyframes tire {
@@ -497,7 +556,9 @@ export default function AnimationURL() {
                           width: 0%;
                         }
                         to {
-                          width: ${attributeInfo?.tire + "%"};
+                          width: ${attributeInfo?.tire
+                            ? attributeInfo?.tire + "%"
+                            : "0%"};
                         }
                       }
                       .progress-bar {

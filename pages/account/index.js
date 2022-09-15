@@ -6,6 +6,7 @@ import { ERC721Address } from "../../contract/addresses";
 import CollectionTypeCard from "../../components/account/NFTCard";
 import LazyCollectionTypeCard from "../../components/account/LazyCard";
 import Navbar from "../../components/Navbar";
+import { RiUser4Line } from "react-icons/ri";
 
 function Account() {
   const { address } = useAccount();
@@ -63,7 +64,12 @@ function Account() {
       </h3> */}
       <div className="px-20 mb-24">
         <div className="relative bg-secondary h-44 rounded-xl">
-          <div className="absolute bg-gray-400 h-36 w-36 rounded-full left-16 -bottom-16 border-8 border-primary"></div>
+          <div className="absolute flex items-center justify-center bg-gray-400 h-36 w-36 rounded-full left-16 -bottom-16 border-8 border-primary">
+            <RiUser4Line className="text-primary text-7xl font-bold" />
+          </div>
+          <h4 className="absolute left-56 bottom-4 text-gray-400 text-2xl font-semibold">
+            {/* {address?.slice(0, 8)+"..."+address?.slice(-4)} */}
+          </h4>
         </div>
       </div>
       <div className="mt-16 mx-8 md:mx-12 lg:mx-16 mb-12 rounded-3xl">
