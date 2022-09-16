@@ -1,6 +1,6 @@
 import React from "react";
 
-function Hero() {
+function Hero({ setBuyTokensModel }) {
   return (
     <div className="text-center h-[calc(100vh-100px)]">
       <h2 className="w-11/12 md:w-6/12 mx-auto font-play text-5xl font-bold uppercase pt-40">
@@ -10,8 +10,16 @@ function Hero() {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ultricies velit
         lacus, nunc, lorem lacinia aliquam vestibulum. In adipiscing.
       </p>
-      <button className="bg-[#FF0000] text-sm uppercase font-semibold py-3 px-4 rounded">
-        Play Now
+      <button
+        onClick={() => {
+          setBuyTokensModel({
+            openStatus: true,
+            tokens: 0,
+          });
+        }}
+        className="bg-[#FF0000] text-sm uppercase font-semibold py-3 px-4 rounded"
+      >
+        Buy Throttle
       </button>
     </div>
   );

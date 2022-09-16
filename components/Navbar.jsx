@@ -73,31 +73,8 @@ function Navbar() {
               <TbAlertCircle className="mr-1" />
               Pay to Earn
             </li>
-            <Link href="/account">
-              <li className="flex items-center text-xl font-semibold cursor-pointer">
-                <BiUser className="mr-1" />
-                Profile
-              </li>
-            </Link>
 
-            <li>
-              {/* {!isDisconnected ? (
-                <button
-                  // onClick={disconnectWallet}
-                  className="text-primary bg-wallet text-base font-semibold px-9 py-3 rounded-tl-3xl rounded-tr-lg rounded-bl-lg rounded-br-3xl"
-                >
-                  {walletAddress?.slice(0, 5)}...
-                  {walletAddress?.slice(-4)}
-                </button>
-              ) : (
-                <button
-                  // onClick={connectWallet}
-                  className="text-primary bg-wallet text-base font-semibold px-9 py-3 rounded-tl-3xl rounded-tr-lg rounded-bl-lg rounded-br-3xl"
-                >
-                  Connect
-                </button>
-              )} */}
-              {/* <ConnectKitButton /> */}
+            <li className="flex items-center">
               <ConnectKitButton.Custom>
                 {({ isConnected, show, truncatedAddress, ensName }) => {
                   return (
@@ -112,6 +89,14 @@ function Navbar() {
                   );
                 }}
               </ConnectKitButton.Custom>
+              <Link href="/account">
+                <div className="bg-blue-500 p-4 rounded-full ml-4 flex items-center text-xl font-semibold cursor-pointer">
+                  <BiUser />
+                  {/* <span className="pl-3 text-base leading-none bg-transparent font-semibold">
+                    MY NFTS
+                  </span> */}
+                </div>
+              </Link>
             </li>
           </ul>
         </div>

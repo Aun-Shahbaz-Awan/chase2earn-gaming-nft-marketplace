@@ -88,14 +88,20 @@ export default function Asset() {
       })
       .catch((error) => console.log(error));
   };
-  // Sell Token --------------------------------------------------------------
+  // Sell Token (i.e List Item)--------------------------------------------------------------
   const handleSellToken = () => {
     axios
       .get(process.env.baseURL + "/attribute/get/" + slug[1])
       .then((response) => {
         if (response?.data?.damage >= 100) {
           mk_contract
-            .listCar(tokenInfo?.token_id, 100)
+            .listCar(
+              tokenInfo?.token_id,
+              ethers.utils.parseUnits(
+                sellPriceModel?.price?.toString(),
+                "ether"
+              )
+            )
             .then((responce) => {
               toast.promise(
                 responce.wait().then((tx) => {
@@ -150,9 +156,8 @@ export default function Asset() {
   const handleBuyToken = () => {
     mk_contract
       .sell(owner?.address, slug[1], {
-        value: BigInt(
-          ethers.utils.parseEther(ethers.utils.formatEther(listingInfo?.price ? listingInfo?.price : 0)),
-        ),
+        // value: BigInt(ethers.utils.parseEther(listingInfo?.price)),
+        value: ethers.utils.parseEther(listingInfo?.price.toString()),
       })
       .then((responce) => {
         toast.promise(
@@ -209,6 +214,13 @@ export default function Asset() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer, slug]);
   console.log("Assets Randering...:", tokenInfo);
+  if (sellPriceModel?.price > 0) {
+    console.log(
+      sellPriceModel?.price,
+      "ETH in Wei:",
+      ethers.utils.parseUnits(sellPriceModel?.price?.toString(), "ether")
+    );
+  }
 
   if (owner.loaded === true && owner?.address === "")
     return (
@@ -226,6 +238,7 @@ export default function Asset() {
         handleSellToken={handleSellToken}
         sellPriceModel={sellPriceModel}
         setSellPriceModel={setSellPriceModel}
+        token={tokenInfo}
       />
       <ToastContainer />
       <Navbar />
@@ -277,26 +290,28 @@ export default function Asset() {
                       </p>
                       <p className="text-base">
                         <span className="text-3xl font-semibold text-blue-400">
-                          {listingInfo?.price ? listingInfo?.price : "exxor"}
+                          {listingInfo?.price
+                            ? listingInfo?.price
+                            : "Loading..."}
                         </span>
                         <span className="text-lg font-semibold text-gray-300">
                           {" "}
-                          wei{"  "}
+                          Ether{"  "}
                         </span>
-                        (
+                        {/* (
                         {ethers.utils.formatEther(
                           listingInfo?.price ? listingInfo?.price : "exxor"
                         )}{" "}
-                        Eth)
+                        Eth) */}
                       </p>
                     </div>
 
                     <button
                       type="button"
                       //   onClick={() => handleSellToken()}
-                      className="text-lg font-semibold text-black bg-wallet py-2 px-20 rounded-full"
+                      className="text-lg font-semibold text-black bg-wallet py-2 px-16 rounded-full"
                     >
-                      Listed
+                      Listed By You
                     </button>
                   </div>
                 ) : (
@@ -327,9 +342,9 @@ export default function Asset() {
                       </span>
                       <span className="text-lg font-semibold text-gray-300">
                         {" "}
-                        wei{"  "}
+                        Ether{"  "}
                       </span>
-                      ({ethers.utils.formatEther(listingInfo.price)} Eth)
+                      {/* ({ethers.utils.formatEther(listingInfo.price)} Eth) */}
                     </p>
                   </div>
                   <button

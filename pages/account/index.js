@@ -1,18 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useAccount } from "wagmi";
+import { ethers } from "ethers";
+import { useAccount, useSigner } from "wagmi";
 import { ERC721Address } from "../../contract/addresses";
 // import Navbar from "./_main/Navbar";
 import CollectionTypeCard from "../../components/account/NFTCard";
 import LazyCollectionTypeCard from "../../components/account/LazyCard";
 import Navbar from "../../components/Navbar";
-import { RiUser4Line } from "react-icons/ri";
+
+import { ERC20Address } from "../../contract/addresses";
+import { ERC20ABI } from "../../contract/abis";
+// import { RiUser4Line } from "react-icons/ri";
 
 function Account() {
   const { address } = useAccount();
+  const { data: signer } = useSigner();
   const [NFTS, setNFTS] = useState([]);
+  const [tokens, setTokens] = useState("");
+
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [cursor, setCursor] = useState(null);
+
+  const TKNContract = new ethers.Contract(ERC20Address, ERC20ABI, signer);
+  const getUsersTokens = () => {
+    TKNContract?.balanceOf(address)
+      .then((responce) => {
+        setTokens((parseInt(responce, 10) / 1e18).toString());
+      })
+      .catch((error) => console.log(error));
+  };
+  console.log("Contract:", TKNContract);
+  console.log("Topken:", tokens);
 
   const getUsersNFTS = () => {
     axios
@@ -31,6 +49,7 @@ function Account() {
         setLoadingStatus(true);
       });
   };
+
   const handleLoadMore = () => {
     axios
       .get(
@@ -50,11 +69,15 @@ function Account() {
         setLoadingStatus(true);
       });
   };
-  console.log("Tokens:", NFTS, "ADDRESSE:", address);
+
+  // console.log("Tokens:", NFTS, "ADDRESSE:", address);
   //   console.log("ERC Adress:", ERC721Address, "Cursor:", cursor);
   useEffect(() => {
-    if (address) getUsersNFTS();
-  }, [address]);
+    if ((address, signer)) {
+      getUsersNFTS();
+      getUsersTokens();
+    }
+  }, [address, signer]);
   return (
     <React.Fragment>
       {/* <Navbar /> */}
@@ -62,17 +85,24 @@ function Account() {
       {/* <h3 className="text-4xl font-bold text-center px-12 mt-12">
         MY Collection
       </h3> */}
-      <div className="px-20 mb-24">
+      {/* <div className="px-20 mb-24">
         <div className="relative bg-secondary h-44 rounded-xl">
           <div className="absolute flex items-center justify-center bg-gray-400 h-36 w-36 rounded-full left-16 -bottom-16 border-8 border-primary">
             <RiUser4Line className="text-primary text-7xl font-bold" />
           </div>
           <h4 className="absolute left-56 bottom-4 text-gray-400 text-2xl font-semibold">
-            {/* {address?.slice(0, 8)+"..."+address?.slice(-4)} */}
+            {address?.slice(0, 8)+"..."+address?.slice(-4)}
+          </h4>
+        </div>
+      </div> */}
+      <div className="px-20">
+        <div className="relative flex items-center bg-secondary h-16 rounded-xl">
+          <h4 className="bottom-4 text-gray-200 ml-10 text-lg font-medium">
+            Balance:{tokens}TTL
           </h4>
         </div>
       </div>
-      <div className="mt-16 mx-8 md:mx-12 lg:mx-16 mb-12 rounded-3xl">
+      <div className="mt-12 mx-8 md:mx-12 lg:mx-16 mb-12 rounded-3xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-8 mx-4">
           {NFTS.length || loadingStatus ? (
             <>
