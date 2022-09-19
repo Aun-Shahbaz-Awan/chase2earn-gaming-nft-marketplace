@@ -161,11 +161,11 @@ export default function SellPriceModal({
                       className="inline-flex justify-center rounded-lg border border-transparent bg-green-400 text-green-900 disabled:bg-red-400 disabled:text-red-900 px-8 py-2 text-md font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       disabled={sellPriceModel?.price <= 0.000000000000000001}
                       onClick={() => {
-                        handleSellToken();
                         setSellPriceModel((sellPriceModel) => ({
                           ...sellPriceModel,
                           openStatus: false,
                         }));
+                        handleSellToken();
                       }}
                     >
                       List

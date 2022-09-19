@@ -90,63 +90,72 @@ export default function Asset() {
   };
   // Sell Token (i.e List Item)--------------------------------------------------------------
   const handleSellToken = () => {
+    console.log(
+      "DB Price:",
+      sellPriceModel?.price,
+      "Blockchain Price:",
+      ethers.utils.parseUnits(sellPriceModel?.price, "ether")
+    );
     axios
       .get(process.env.baseURL + "/attribute/get/" + slug[1])
       .then((response) => {
         if (response?.data?.damage >= 100) {
-          mk_contract
-            .listCar(
-              tokenInfo?.token_id,
-              ethers.utils.parseUnits(
-                sellPriceModel?.price?.toString(),
-                "ether"
+          toast.promise(
+            mk_contract
+              .listCar(
+                tokenInfo?.token_id,
+                ethers.utils.parseUnits(sellPriceModel?.price, "ether")
               )
-            )
-            .then((responce) => {
-              toast.promise(
-                responce.wait().then((tx) => {
-                  console.log("Marketplace List Token :", tx);
-                  axios
-                    .post(
-                      process.env.baseURL + "/list/create",
-                      {
-                        owner_address: address,
-                        token_address: tokenInfo.token_address,
-                        token_id: tokenInfo.token_id,
-                        isListed: true,
-                        price: sellPriceModel?.price,
-                        slug: JSON.parse(tokenInfo?.metadata)
-                          .name.replace(/\s+/g, "-")
-                          .toLowerCase(),
-                        metadata: JSON.parse(tokenInfo?.metadata),
-                      },
-                      {
-                        headers: {
-                          Authorization: "Bearer " + tokenContext?.bearerToken,
+              .then((responce) => {
+                toast.promise(
+                  responce.wait().then((tx) => {
+                    console.log("Marketplace List Token :", tx);
+                    axios
+                      .post(
+                        process.env.baseURL + "/list/create",
+                        {
+                          owner_address: address,
+                          token_address: tokenInfo.token_address,
+                          token_id: tokenInfo.token_id,
+                          isListed: true,
+                          price: sellPriceModel?.price,
+                          slug: JSON.parse(tokenInfo?.metadata)
+                            .name.replace(/\s+/g, "-")
+                            .toLowerCase(),
+                          metadata: JSON.parse(tokenInfo?.metadata),
                         },
-                      }
-                    )
-                    .then((responce) => {
-                      console.log("Add Listing to DB:", responce);
-                      getOwner();
-                      getListed();
-                    })
-                    .catch((error) => {
-                      console.log("Add Listing to DB:", error);
-                      getOwner();
-                      getListed();
-                    });
-                }),
-                {
-                  pending: "Listing in Process...",
-                  success: "Listed Successfully!",
-                }
-              );
-            })
-            .catch((error) => {
-              console.log("Marketplace List Token Error:", error);
-              toast.error("Something wrong with Listing.");
-            });
+                        {
+                          headers: {
+                            Authorization:
+                              "Bearer " + tokenContext?.bearerToken,
+                          },
+                        }
+                      )
+                      .then((responce) => {
+                        console.log("Add Listing to DB:", responce);
+                        getOwner();
+                        getListed();
+                      })
+                      .catch((error) => {
+                        console.log("Add Listing to DB:", error);
+                        getOwner();
+                        getListed();
+                      });
+                  }),
+                  {
+                    pending: "Listing in Process...",
+                    success: "Listed Successfully!",
+                  }
+                );
+              })
+              .catch((error) => {
+                console.log("Marketplace List Token Error:", error);
+                toast.error("Transaction Rejected.");
+              }),
+            {
+              pending: "Listing Transaction in Process...",
+            }
+          );
         } else {
           toast.error("Damage recovery must be 100%!");
         }
@@ -154,50 +163,58 @@ export default function Asset() {
   };
   // Buy Token ----------------------------------------------------------
   const handleBuyToken = () => {
-    mk_contract
-      .sell(owner?.address, slug[1], {
-        // value: BigInt(ethers.utils.parseEther(listingInfo?.price)),
-        value: ethers.utils.parseEther(listingInfo?.price.toString()),
-      })
-      .then((responce) => {
-        toast.promise(
-          responce
-            .wait()
-            .then((tx) => {
-              axios
-                .put(
-                  process.env.baseURL +
-                    "/list/update-listing-status/" +
-                    slug[1],
-                  {
-                    isListed: false,
-                  },
-                  {
-                    headers: {
-                      Authorization: "Bearer " + tokenContext?.bearerToken,
+    toast.promise(
+      mk_contract
+        .sell(owner?.address, slug[1], {
+          // value: BigInt(ethers.utils.parseEther(listingInfo?.price)),
+          value: ethers.utils.parseEther(listingInfo?.price),
+        })
+        .then((responce) => {
+          toast.promise(
+            responce
+              .wait()
+              .then((tx) => {
+                axios
+                  .put(
+                    process.env.baseURL +
+                      "/list/update-listing-status/" +
+                      slug[1],
+                    {
+                      isListed: false,
                     },
-                  }
-                )
-                .then((responce) => {
-                  console.log("Add Listing to DB:", responce);
-                })
-                .catch((error) => {
-                  console.log("Add Listing to DB:", error);
-                });
-              getOwner();
-              getListed();
-              toast.success("Purchased Sucessfully");
-            })
-            .catch((err) => {
-              console.log("Error in Purchase", err);
-              toast.error;
-            }),
-          {
-            pending: "Purchase in Process...",
-          }
-        );
-      })
-      .catch((err) => console.log(err));
+                    {
+                      headers: {
+                        Authorization: "Bearer " + tokenContext?.bearerToken,
+                      },
+                    }
+                  )
+                  .then((responce) => {
+                    console.log("Add Listing to DB:", responce);
+                  })
+                  .catch((error) => {
+                    console.log("Add Listing to DB:", error);
+                  });
+                getOwner();
+                getListed();
+                toast.success("Purchased Sucessfully");
+              })
+              .catch((err) => {
+                console.log("Error in Purchase", err);
+                toast.error;
+              }),
+            {
+              pending: "Purchase in Process...",
+            }
+          );
+        })
+        .catch((err) => {
+          console.log(err)
+          toast.error("Transaction Failed!")
+        }),
+      {
+        pending: "Transaction in Process...",
+      }
+    );
   };
 
   React.useEffect(() => {
@@ -214,13 +231,13 @@ export default function Asset() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer, slug]);
   console.log("Assets Randering...:", tokenInfo);
-  if (sellPriceModel?.price > 0) {
-    console.log(
-      sellPriceModel?.price,
-      "ETH in Wei:",
-      ethers.utils.parseUnits(sellPriceModel?.price?.toString(), "ether")
-    );
-  }
+  // if (sellPriceModel?.price > 0) {
+  //   console.log(
+  //     sellPriceModel?.price,
+  //     "ETH in Wei:",
+  //     ethers.utils.parseUnits(sellPriceModel?.price?.toString(), "ether")
+  //   );
+  // }
 
   if (owner.loaded === true && owner?.address === "")
     return (
@@ -292,7 +309,7 @@ export default function Asset() {
                         <span className="text-3xl font-semibold text-blue-400">
                           {listingInfo?.price
                             ? listingInfo?.price
-                            : "Loading..."}
+                            : sellPriceModel?.price}
                         </span>
                         <span className="text-lg font-semibold text-gray-300">
                           {" "}

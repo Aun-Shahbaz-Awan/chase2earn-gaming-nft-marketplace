@@ -30,13 +30,11 @@ function PublicNFTSale({ NFTContract, MKPContract, signer }) {
   const [mintingId, setMintingId] = useState(0);
   const [transactionHash, setTransactionHash] = useState("");
   const fetchTokenAvailabilityStatus = async () => {
-    console.log("Contract Fetching...:", NFTContract);
     const uncommon = (
       await Promise.all(
         [1, 2, 3, 4].map(async (number) => {
           const availibilityStatus = await NFTContract.carInfo(number)
             .then((responce) => {
-              console.log("uncommon responce:", responce);
               return parseInt(responce.amount, 10) >
                 parseInt(responce.totalSelled, 10)
                 ? number
@@ -49,6 +47,7 @@ function PublicNFTSale({ NFTContract, MKPContract, signer }) {
         })
       )
     ).filter(Boolean);
+
     const rare = (
       await Promise.all(
         [5, 6, 7, 8].map(async (number) => {
@@ -67,8 +66,43 @@ function PublicNFTSale({ NFTContract, MKPContract, signer }) {
       )
     ).filter(Boolean);
     setTokenAvailabilityStatus({ uncommon, rare });
+    console.log("Availibility Status Uncommon:", uncommon, "Rare:", rare);
   };
 
+  const handleMintToken = (mintId) => {
+    NFTContract.carInfo(mintId)
+      .then((responce) => {
+        setMintingId(mintId);
+        console.log("Minting...", mintId);
+        toast.promise(
+          MKPContract.buyCar(mintId, 1, {
+            value: responce?.price?._hex,
+          })
+            .then((tx) => {
+              toast.promise(
+                tx.wait().then((responce) => {
+                  setMintingProcessStatus(true);
+                  setTransactionHash(responce?.transactionHash);
+                  console.log("Minted #", mintId, " :", responce);
+                }),
+                {
+                  pending: "Minting in Process...",
+                  success: "Minted Successfully!",
+                }
+              );
+            })
+            .catch((err) => {
+              toast.error("Something went wrong");
+              setMintingStatus({ status: false, category: "uncommon" });
+              console.log("Error", err);
+            }),
+          {
+            pending: "Tranaction in Process...",
+          }
+        );
+      })
+      .catch((error) => console.log("Getting Car Info Error:", error));
+  };
   const handleBuyUncommon = () => {
     setMintingStatus({ status: true, category: "uncommon" });
     const mintId =
@@ -76,39 +110,7 @@ function PublicNFTSale({ NFTContract, MKPContract, signer }) {
         Math.floor(Math.random() * tokenAvailabilityStatus?.uncommon?.length)
       ];
     setMintingId(mintId);
-    console.log(
-      "Token Availability Status",
-      tokenAvailabilityStatus,
-      "Minting Token #",
-      mintId
-    );
-    toast.promise(
-      MKPContract.buyCar(mintId, 1, {
-        /* global BigInt */
-        value: BigInt(ethers.utils.parseEther("0.0000000000000001")),
-      })
-        .then((tx) => {
-          toast.promise(
-            tx.wait().then((responce) => {
-              setMintingProcessStatus(true);
-              setTransactionHash(responce?.transactionHash);
-              console.log("Minted #", mintId, " :", responce);
-            }),
-            {
-              pending: "Minting in Process...",
-              success: "Minted Successfully!",
-            }
-          );
-        })
-        .catch((err) => {
-          toast.error("Something went wrong");
-          setMintingStatus({ status: false, category: "uncommon" });
-          console.log("Error", err);
-        }),
-      {
-        pending: "Tranaction in Process...",
-      }
-    );
+    handleMintToken(mintId);
   };
 
   const handleBuyRare = () => {
@@ -118,32 +120,7 @@ function PublicNFTSale({ NFTContract, MKPContract, signer }) {
         Math.floor(Math.random() * tokenAvailabilityStatus?.rare?.length)
       ];
     setMintingId(mintId);
-    toast.promise(
-      MKPContract.buyCar(mintId, 1, {
-        value: BigInt(ethers.utils.parseEther("0.0000000000000001")),
-      })
-        .then((tx) => {
-          toast.promise(
-            tx.wait().then((responce) => {
-              setMintingProcessStatus(true);
-              setTransactionHash(responce?.transactionHash);
-              console.log("Minted #", mintId, " :", responce);
-            }),
-            {
-              pending: "Minting in Process...",
-              success: "Minted Successfully!",
-            }
-          );
-        })
-        .catch((err) => {
-          toast.error("Something went wrong");
-          setMintingStatus({ status: false, category: "uncommon" });
-          console.log("Error", err);
-        }),
-      {
-        pending: "Tranaction in Process...",
-      }
-    );
+    handleMintToken(mintId);
   };
 
   useEffect(() => {
@@ -291,7 +268,7 @@ function PublicNFTSale({ NFTContract, MKPContract, signer }) {
                   </div>
                   {transactionHash ? (
                     <div className="mt-2">
-                      <p className="text-lg font-medium text-blue-400 cursor-pointer inline-block px-2">
+                      <p className="text-lg font-medium text-primary cursor-pointer inline-block px-2">
                         <a
                           href={`https://rinkeby.etherscan.io/tx/${transactionHash}`}
                           target="_blank"

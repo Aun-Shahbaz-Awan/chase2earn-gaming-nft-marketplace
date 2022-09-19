@@ -73,7 +73,7 @@ function Listed() {
       <div className="border border-[#FF0000] mx-8 md:mx-12 lg:mx-20 mb-28 mt-16 rounded-3xl">
         <div className="flex justify-center mb-2">
           <div className="bg-primary border-2 border-[#FF0000] font-a4speed text-3xl tracking-wide pt-4 pb-3 px-12 rounded-full -mt-8 mb-8">
-            Listed NFTS
+            Listed Cars Categories
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 mx-12">
